@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+  <section class="hero-main hero is-info is-light">
+  <div class="hero-body">
+      <div class="container">
+          <div class="columns">
+              <div class="column column is-three-fifths">
+                  <br><br>
+                  <h1 class="title has-text-weight-bold">Better Editor!</h1>
+                  <p>Say "hello" to a different messaging experience. An unexpected focus on privacy, combined with all of the features you expect.</p>
+                  <br>
+                  <div>
+                      <a class="button is-primary" href="/upload">上传文件</a>
+                  </div>
+              </div>
+              <div class="column">
+                  <img src="{% static 'images/papers.jpg' %}">
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
+  </section>
+  <div class="section">
+        <div class="container">
+            <div class="columns">
+              <main class="column is-9">
+                  <section class="why-signal section">
+                      <div class="container">
+                          <div class="columns is-centered">
+                              <div class="column has-text-centered">
+                                  <h2 class="title has-text-weight-bold">Why use EDITOR?</h2>
+                                  <p>Explore below to see why Signal is a simple, powerful, and secure messenger</p>
+                              </div>
+                          </div>
+                      </div>
+                  </section>
+                  <section class="section features">
+                      <div class="container">
+                          <div class="columns is-centered">
+                              <div class="column is-half has-text-centered">
+                                  <div class="box">
+                                      <img src="{% static 'images/zy.jpg' %}">
+                                      <h3 class="title has-text-weight-bold">专业</h3>
+                                      <p>Share text, voice messages, photos, videos, GIFs and files for free. Signal uses your phone's data connection so you can avoid SMS and MMS fees.</p>
+                                  </div>
+                              </div>
+                              <div class="column is-half has-text-centered">
+                                  <div class="box">
+                                      <img src="{% static 'images/efficient.jpg' %}">
+                                      <h3 class="title has-text-weight-bold">高效</h3>
+                                      <p>Make crystal-clear voice and video calls to people who live across town, or across the ocean, with no long-distance charges.</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="columns is-centered">
+                              <div class="column is-half has-text-centered">
+                                  <div class="box">
+                                      <img src="{% static 'images/reliable.jpg' %}">
+                                      <h3 class="title has-text-weight-bold">可靠</h3>
+                                      <p>Add a new layer of expression to your conversations with encrypted stickers. You can also create and share your own sticker packs.</p>
+                                  </div>
+                              </div>
+                              <div class="column is-half has-text-centered">
+                                  <div class="box">
+                                      <img src="{% static 'images/win.jpg' %}">
+                                      <h3 class="title has-text-weight-bold">共赢</h3>
+                                      <p>Group chats make it easy to stay connected to your family, friends, and coworkers.</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </section>
+              </main>
+                <aside class="column sidebar">
+                    <h3 class="title boxed-section-title is-2 text-center">&nbsp;</h3>
+                    <div class="box">
+                        <h5 class="title is-4">学术资源</h5>
+                        <ul class="sidebar-categories-list">
+                        <li><a class="prefetch" href="">Accounting</a></li>
+                        <li><a class="prefetch" href="">Action</a></li>
+                        <li><a class="prefetch" href="">Adventure</a></li>
+                        <li><a class="prefetch" href="">Analytics</a></li>
+                        <li><a class="prefetch" href="">Blogging Platform</a></li>
+                        </ul>
+                    </div>
+              </aside>
+            </div>
+        </div>
+  </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                The source code is licensed
+                <a href="http://www.buaa.edu.cn/">GH</a>.
+            </p>
+        </div>
+    </footer>
+{% endblock %}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="474c3028-45bc-4bae-9d25-e8df422f7f98" name="212.64" url="http://212.64.64.87">
+        <fileTransfer host="212.64.64.87" port="22" rootFolder="/home/ubuntu/CrowdPlat" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,96 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block body %}
+    <script type="text/javascript">
+        window.onload = function (ev) {
+            var btn = document.querySelector('button');
+            var result = document.getElementById('result');
+            var num = document.getElementById('numbers');
+            btn.onclick = function (ev2) {
+                var file = $('#file');
+                var formdata = new FormData();
+                formdata.append('file', file[0].files[0]);
+                formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                {#alert(formdata);#}
+                $.ajax({
+                    type: "POST",
+                    url: "/wordnumbers/",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function (msg) {
+                        num.innerText = msg;
+                        result.innerText = parseFloat(msg)/1000;
+                        {#alert('文件上传成功！');#}
+                    },
+                    error: function (xhr) {
+                        if(xhr.status){
+                            alert('请选择正确的的docx格式文件！');
+                        }
+                        else{
+                            alert(xhr.status);
+                        }
+
+                    }
+                });
+                return false;
+            }
+        }
+    </script>
+<div class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-three-fifths is-offset-one-fifth">
+                    <div class="box">
+                        <h3 class="title is-4">Commit </h3>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">word文档：</label>
+                                </div>
+                                <div class="field-body">
+                                    <input type="file" name="file" id="file">
+                                </div>
+                                <button class="button is-primary">提交</button>
+                            </div>
+                        </form>
+                        <br>
+                        <table class="table is-fullwidth">
+                            <thead>
+                            <tr>
+                                <th><abbr title="fileName">文档字数</abbr></th>
+                                <th><abbr title="Score">应付金额(元)</abbr></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td id="numbers"></td>
+                                <td id="result"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <h3 class="title is-4">支付</h3>
+                        <div align="center">
+                            <img src="{% static 'images/QR.jpg' %}">
+                        </div>
+{#                        <form method="post" enctype="multipart/form-data" action="{% url 'uploadfile' %}?taskId={{ task.chId }}">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="field is-horizontal">#}
+{#                                <div class="field-label is-normal">#}
+{#                                    <label class="label">Solutions</label>#}
+{#                                </div>#}
+{#                                <div class="field-body">#}
+{#                                    <input type="file" name="file">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="buttons">#}
+{#                                <input class="button is-primary" type="submit" value="Submit">#}
+{#                            </div>#}
+{#                        </form>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

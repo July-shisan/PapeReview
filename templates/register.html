@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="section">
+        <div class="container">
+            <div class="column is-8 is-offset-2">
+                <li class="box">
+                    <div class="columns is-centered">
+                        <div class="column is-four-fifths-desktop is-two-thirds-tablet">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'register' %}">
+                                {% csrf_token %}
+                                <h3 class="title text-center">Register</h3>
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Name</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input name="username" class="input" id="username" type="text" required>
+                                                <p id="notice" style="display: none;color: red">User with this Name already exists.</p>
+{#                                                <div class="help">You can use only <b>letters, digits and dashes</b></div>#}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Password</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control"><input name="password" class="input" id="" type="password" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal"></div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                You already have an account? <a href="/login">Login</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buttons is-centered" style="padding-left: 80px">
+                                    <button class="button is-success" type="submit" style="width: 200px;">
+                                        Register
+                                    </button>
+                                </div>
+<!--                                <div class="field is-horizontal">-->
+<!--                                    <div class="field-label is-normal"></div>-->
+<!--                                    <div class="field-body">-->
+<!--                                        <div class="field">-->
+<!--                                            <div class="control">-->
+<!--                                                <input class="button is-success" type="submit" value="Register">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </div>
+{% endblock %}

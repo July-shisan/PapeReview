@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+{#    <script src="javascript/tag.js"></script>#}
+{#    <script src="javascript/loading.js"></script>#}
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+{#    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>#}
+
+</head>
+<body class="index has-navbar-fixed-top">
+<nav class="navbar signal-navbar is-fixed-top">
+    <div class="container">
+        <div class="navbar-brand"></div>
+        <div id="navbarMenuHeroA" class="navbar-menu">
+            <div class="navbar">
+                <a class="navbar-item simple-link hide-on-search prefetch has-text-black" href="/">EDITOR</a>
+                <a class="navbar-item simple-link hide-on-search prefetch has-text-black" href="">关于我们</a>
+            </div>
+            <div class="navbar-end">
+                {% if front_user %}
+                    <a class="navbar-item simple-link hide-on-search prefetch has-text-black" href="/profile">{{ front_user.username }}</a>
+                    <a class="navbar-item simple-link hide-on-search prefetch has-text-black" href="/logout">Logout</a>
+                {% else %}
+                    <a class="navbar-item simple-link hide-on-search prefetch has-text-black" href="{% url 'register' %}">register</a>
+                    <a class="navbar-item simple-link hide-on-search prefetch has-text-black" href="{% url 'login' %}?next={{ request.path }}">login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+{% block body %}{% endblock %}
+</body>
+</html>

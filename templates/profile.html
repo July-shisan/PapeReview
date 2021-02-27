@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+{% block body %}
+<style>
+    .input1{
+        outline: #ffffff;
+        border-radius:3px;
+        border:1px solid #a1a1a1;
+    }
+</style>
+    <div class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-7">
+                    <div class="box">
+                        <h2 class="title is-4">个人中心 </h2>
+                        <form action="" method="post" accept-charset="UTF-8">
+                            {% csrf_token %}
+                            <input name="authenticity_token" type="hidden">
+                            <div class="field info-field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">用户名</label>
+                                </div>
+{#                                <div class="field-body">#}
+{#                                    {{ user.username }}#}
+{#                                </div>#}
+                                <div class="field-body">
+                                    {% if user.username %}
+                                        <p onclick="editname()" id="showname">{{ user.username }}</p>
+                                        <input name="username" onKeyUp="if(this.value.length>200) this.value=this.value.substr(0,100)" maxlength="100"
+                                           placeholder="{{ user.username }}" style="display: none; width: 400px;outline: #ffffff;border-radius:3px;border:1px solid #a1a1a1;" value="{{ user.username }}" id="editname">
+                                    {% else %}
+                                        <input name="username" onKeyUp="if(this.value.length>200) this.value=this.value.substr(0,100)" maxlength="100"
+                                           placeholder="未添加" style="width: 400px;outline: #ffffff;border-radius:3px;border:1px solid #a1a1a1;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="field info-field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">Email</label>
+                                </div>
+{#                                <div class="field-body">#}
+{#                                    {{ user.email }}#}
+{#                                </div>#}
+                                <div class="field-body">
+                                    {% if user.email %}
+                                        <p onclick="editskills()" id="showskills">{{ user.email }}</p>
+                                        <input name="email" onKeyUp="if(this.value.length>200) this.value=this.value.substr(0,100)" maxlength="100"
+                                           placeholder="{{ user.email }}" style="display: none; width: 400px;outline: #ffffff;border-radius:3px;border:1px solid #a1a1a1;" value="{{ user.email }}" id="editskills">
+                                    {% else %}
+                                        <input name="email" onKeyUp="if(this.value.length>200) this.value=this.value.substr(0,100)" maxlength="100"
+                                           placeholder="未添加" style="width: 400px;outline: #ffffff;border-radius:3px;border:1px solid #a1a1a1;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="field info-field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">个人简介</label>
+                                </div>
+                                <div class="field-body">
+                                    {% if user.profile %}
+                                        <p onclick="edit()" id="showinfo">{{ user.profile }}</p>
+                                        <textarea name="profile" style="display: none;" class="textarea"
+                                           onKeyUp="if(this.value.length>500) this.value=this.value.substr(0,300)" maxlength="300"
+                                                  placeholder="{{ user.profile }}" id="editinfo">{{ user.profile }}</textarea>
+                                    {% else %}
+                                        <textarea name="profile" class="textarea" onKeyUp="if(this.value.length>500) this.value=this.value.substr(0,300)"
+                                                  maxlength="300" placeholder="介绍一下自己吧" rows="2"></textarea>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal"></div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control">
+                                            <input class="button is-success" type="submit" value="更新">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                <nav class="panel">
+                    <p class="panel-heading">我的订单</p>
+                    <p class="panel-tabs">
+                        <a class="is-active" id="act1" onclick="firstPage(this)">待处理</a>
+                        <a class="" id="act2" onclick="secondPage(this)">处理中</a>
+                        <a class="" id="act3" onclick="thirdPage(this)">已完成</a>
+                    </p>
+                        <div id="releaseTask">
+                            {% for task in pending %}
+                            {% if forloop.counter < 5 %}
+                            <div class="panel-block">
+                                <div class="column is-10" style="padding: 0;">
+                                    <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                                </div>
+                                <div class="column is-2" style="padding: 0;">
+                                    <a name={{ task.uploadfile.fileId }} id="before{{ task.uploadfile.fileId }}" onclick="cancelIt('{{ task.chId }}', this)">取消订单</a>
+                                    <p style="display: none" id="over{{ task.uploadfile.fileId }}">已取消该订单</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                    <div class="column is-2 is-offset-5"><a onclick="moreFirst()">More</a></div>
+                            </div>
+                        </div>
+                        <div id="releaseMore" style="display: none">
+                            {% for task in pending %}
+                            <div class="panel-block">
+                                <div class="column is-10" style="padding: 0;">
+                                    <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                                </div>
+                                <div class="column is-2" style="padding: 0;">
+                                    <a href="#">取消订单</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                    <div class="column is-2 is-offset-5"><a onclick="holdFirst()">Hold</a></div>
+                            </div>
+                        </div>
+
+                        <div id="joinTask" style="display: none">
+                            {% for task in processing %}
+                            {% if forloop.counter < 5 %}
+                            <div class="panel-block">
+                                <div class="column is-10" style="padding: 0;">
+                                    <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                    <div class="column is-2 is-offset-5"><a onclick="moreSecond()">More</a></div>
+                            </div>
+                        </div>
+                        <div id="joinMore" style="display: none">
+                            {% for task in processing %}
+                            <div class="panel-block">
+                                <div class="column is-10" style="padding: 0;">
+                                    <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                    <div class="column is-2 is-offset-5"><a onclick="holdSecond()">Hold</a></div>
+                            </div>
+                        </div>
+
+                        <div id="ongoingTask" style="display: none">
+                            {% for task in finished %}
+                            {% if forloop.counter < 5 %}
+                            <div class="panel-block">
+                                <div class="column is-8" style="padding:0;">
+                                    <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                                </div>
+
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                    <div class="column is-2 is-offset-5"><a onclick="moreThird()">More</a></div>
+                            </div>
+                        </div>
+                        <div id="ongoingMore" style="display: none">
+                            {% for task in finished %}
+                            <div class="panel-block">
+                                <div class="column is-8" style="padding:0;">
+                                    <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                <div class="column is-2 is-offset-5"><a onclick="holdThird()">Hold</a></div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <nav class="panel">
+                        <p class="panel-heading">已取消订单</p>
+                        <p class="panel-tabs">
+                            <a class="is-active" id="act4" onclick="forthPage(this)">用户取消</a>
+                            <a class="" id="act5" onclick="fifthPage(this)">系统取消</a>
+                        </p>
+                        <div id="releaseHist">
+                            {% for task in self_cancel %}
+                            {% if forloop.counter < 5 %}
+                            <div class="panel-block">
+                                <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                <div class="column is-2 is-offset-5"><a onclick="moreForth()">More</a></div>
+                            </div>
+                        </div>
+                        <div id="releaseHistMore" style="display: none">
+                            {% for task in self_cancel %}
+                            <div class="panel-block">
+                                <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                            </div>
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                    <div class="column is-2 is-offset-5"><a onclick="holdForth()">Hold</a></div>
+                            </div>
+                        </div>
+                        <div id="finished" style="display: none">
+                            {% for task in sys_cancel %}
+                            {% if forloop.counter < 5 %}
+                            <div class="panel-block">
+                                <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                <div class="column is-2 is-offset-5"><a onclick="moreFifth()">More</a></div>
+                            </div>
+                        </div>
+                        <div id="finishedMore" style="display: none">
+                            {% for task in sys_cancel %}
+                            <div class="panel-block">
+                                <a href="/task/{{task.chId}}">{{ task.uploadfile.name }}</a>
+                            </div>
+                            {% endfor %}
+                            <div class="panel-block" style="padding:0;">
+                                <div class="column is-2 is-offset-5"><a onclick="holdFifth()">Hold</a></div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div class="column">
+                    <h3 class="title is-4">为你推检相关学术资源</h3>
+                    {% if tasks %}
+                    {% for task in tasks %}
+                    <div class="box">
+                        <h3 class="title is-4">
+                            {% if task.Key %}
+                            <a class="prefetch" href="/task/{{ task.Record.task_id }}">
+                                <span class="badge-verified"></span>{{ task.Record.task_name }}
+                            </a>
+                            {% endif %}
+                            {% if not task.Key %}
+                            <a class="prefetch" href="/task/{{ task.task_id }}">
+                                <span class="badge-verified"></span>{{ task.task_name }}</a>
+                            {% endif %}
+                        </h3>
+                        {% if task.Key %}
+                        <p class="tagline text-small">{{ task.Record.detail }}</p>
+                        {% endif %}
+                        {% if not task.Key %}
+                        <p class="tagline text-small">{{ task.detail }}</p>
+                        {% endif %}
+                        <br>
+                        <br>
+                        <div class="columns is-mobile">
+                            <div class="column">
+                                {% if task.Key %}
+                                <a href="/task/{{ task.Record.task_id }}">Learn more</a>
+                                {% endif %}
+                                {% if not task.Key %}
+                                <a href="/task/{{ task.task_id }}">Learn more</a>
+                                {% endif %}
+                            </div>
+                            <div class="column is-narrow">
+                                <a href="#">👍 Vote</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="box">
+                        <p>无数据</p>
+                    </div>
+                    {% endif %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+function editname() {
+        $("#showname").hide();
+        $("#editname").show();
+    }
+    function edit() {
+        $("#showinfo").hide();
+        $("#editinfo").show();
+    }
+    function editskills() {
+        $("#showskills").hide();
+        $("#editskills").show();
+    }
+function cancelIt(challengeid, order) {
+    $.ajax({
+        type: "POST",
+        url: "/cancelIt/",
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}', chid: challengeid},
+        success: function (msg) {
+            // alert(msg);
+            $(document.getElementById('before'+order.name)).hide();
+            $(document.getElementById('over'+order.name)).show();
+            // $("#before"+task.name).hide();
+            // $("#over"+task.name).show();
+        },
+        error: function (xhr) {
+            alert(xhr.status);
+        }
+    });
+}
+function firstPage(obj) {
+    if(obj.className !== 'is-active'){
+        document.getElementById('act2').setAttribute('class', "");
+        document.getElementById('act3').setAttribute('class', "");
+        $("#joinTask").hide();
+        $("#joinMore").hide();
+        $("#ongoingTask").hide();
+        $("#ongoingMore").hide();
+
+        document.getElementById("act1").setAttribute('class', 'is-active');
+        $('#releaseTask').show();
+    }
+
+}
+function secondPage(obj) {
+    if(obj.className !== 'is-active') {
+        document.getElementById('act1').setAttribute('class', "");
+        document.getElementById('act3').setAttribute('class', "");
+        $("#releaseTask").hide();
+        $("#ongoingTask").hide();
+        $("#releaseMore").hide();
+        $("#ongoingMore").hide();
+
+        document.getElementById("act2").setAttribute('class', 'is-active');
+        $("#joinTask").show();
+    }
+}
+function thirdPage(obj) {
+    if(obj.className !== 'is-active') {
+        document.getElementById('act1').setAttribute('class', "");
+        document.getElementById('act2').setAttribute('class', "");
+        $("#releaseTask").hide();
+        $("#joinTask").hide();
+        $("#releaseMore").hide();
+        $("#joinMore").hide();
+
+        document.getElementById("act3").setAttribute('class', 'is-active');
+        $("#ongoingTask").show();
+    }
+}
+function forthPage(obj) {
+    if(obj.className !== 'is-active') {
+        document.getElementById("act5").setAttribute('class', "");
+        $("#finished").hide();
+        $("#finishedMore").hide();
+
+        document.getElementById("act4").setAttribute('class', 'is-active');
+        $("#releaseHist").show();
+    }
+}
+function fifthPage(obj) {
+    if(obj.className !== 'is-active') {
+        document.getElementById("act4").setAttribute('class', '');
+        $("#releaseHist").hide();
+        $("#releaseHistMore").hide();
+
+        document.getElementById("act5").setAttribute('class', "is-active");
+        $("#finished").show();
+    }
+}
+function moreFirst() {
+    $("#releaseTask").hide();
+    $("#releaseMore").show();
+}
+function holdFirst() {
+    $("#releaseMore").hide();
+    $("#releaseTask").show();
+}
+function moreSecond() {
+    $("#joinTask").hide();
+    $("#joinMore").show();
+}
+function holdSecond() {
+    $("#joinMore").hide();
+    $("#joinTask").show();
+}
+function moreThird() {
+    $("#ongoingTask").hide();
+    $("#ongoingMore").show();
+}
+function holdThird() {
+    $("#ongoingMore").hide();
+    $("#ongoingTask").show();
+}
+function moreForth() {
+    $("#releaseHist").hide();
+    $("#releaseHistMore").show();
+}
+function holdForth() {
+    $("#releaseHistMore").hide();
+    $("#releaseHist").show();
+}
+function moreFifth() {
+    $("#finished").hide();
+    $("#finishedMore").show();
+}
+function holdFifth() {
+    $("#finishedMore").hide();
+    $("#finished").show();
+}
+function inviteMe(obj) {
+    if(obj.innerText === 'More'){
+        obj.innerText = 'Hold';
+        $("#inviteMore").show();
+    }
+    else{
+        obj.innerText = 'More';
+        $("#inviteMore").hide()
+    }
+}
+</script>
+{% endblock %}

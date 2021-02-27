@@ -1,0 +1,98 @@
+{% extends 'base.html'%}
+{% block body %}
+<div class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-three-fifths is-offset-one-fifth">
+                    <div class="box">
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">订单状态</label>
+                            </div>
+                            <div class="field-body">
+                                {% if task.chtype == 0 %}
+                                    <p>待处理</p>
+                                {% elif task.chtype == 1 %}
+                                    <p>处理中</p>
+                                {% elif task.chtype == 2 %}
+                                    <p>已完成</p>
+                                {% elif task.chtype == 3 %}
+                                    <p>已取消</p>
+                                {% elif task.chtype == 4 %}
+                                    <p>已取消</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">下单时间</label>
+                            </div>
+                            <div class="field-body">
+                                <p>{{ task.release_time }}</p>
+                            </div>
+                        </div>
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">应付款</label>
+                            </div>
+                            <div class="field-body">
+                                <p>￥{{ task.bill }}（元）</p>
+                            </div>
+                        </div>
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">实付款</label>
+                            </div>
+                            <div class="field-body">
+                                <p>￥{{ task.payment }}（元）</p>
+                            </div>
+                        </div>
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">文件</label>
+                            </div>
+                            <div class="field-body">
+                                <p>{{ task.uploadfile.name }}</p>
+                            </div>
+                        </div>
+                        <form action="/task/{{ task.chId }}" method="post" accept-charset="UTF-8">
+                            {% csrf_token %}
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">备注</label>
+                            </div>
+                            <div class="field-body">
+                                {% if task.requirment %}
+                                    <p onclick="edit()" id="showinfo">{{ task.requirment }}</p>
+                                    <textarea name="requirment" style="display: none;" class="textarea"
+                                       onKeyUp="if(this.value.length>500) this.value=this.value.substr(0,300)" maxlength="300"
+                                              placeholder="{{ task.requirment }}" id="editinfo">{{ task.requirment }}</textarea>
+                                {% else %}
+                                    <textarea name="requirment" class="textarea" onKeyUp="if(this.value.length>500) this.value=this.value.substr(0,300)"
+                                              maxlength="300" placeholder="添加备注" rows="2"></textarea>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="button is-success" type="submit" value="更新">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function edit() {
+            $("#showinfo").hide();
+            $("#editinfo").show();
+        }
+    </script>
+{% endblock %}
