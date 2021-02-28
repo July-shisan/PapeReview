@@ -31,7 +31,7 @@ class homeView(View):
         data = {
             "page_object": page_object,
             "page_range": paginator.page_range,
-            "title": "BUAA",
+            "title": "EDITOR",
             "challenge": challenge,
         }
         return render(request, 'home.html', context=data)
