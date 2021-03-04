@@ -37,3 +37,9 @@ class noteForm(forms.Form):
     def clean(self):
         cleaned_data = super(noteForm, self).clean()
         return cleaned_data
+class payForm(forms.Form):
+    note = forms.CharField(required=False)
+    method = forms.CharField(required=True)
+    def clean(self):
+        cleaned_data = super(payForm, self).clean()
+        return cleaned_data

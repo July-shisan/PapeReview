@@ -10,7 +10,7 @@ class Person(models.Model):
     age = models.IntegerField(default=1)
     email = models.EmailField(null=True)
     frame = models.IntegerField(default=50)
-    register_time = models.DateField(auto_now_add=True)
+    register_time = models.DateTimeField(auto_now_add=True)
     class Meta:
         abstract = True
 
@@ -21,7 +21,7 @@ class User(models.Model):
     password = models.CharField(max_length=100, null=False)
     email = models.EmailField(null=True)
     profile = models.TextField(null=True)
-    register_time = models.DateField(auto_now_add=True)
+    register_time = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = 'user'
     def __str__(self):
@@ -29,13 +29,14 @@ class User(models.Model):
 
 class Challenge(models.Model):
     chId = models.AutoField(primary_key=True)
-    chtype = models.IntegerField(default=0, validators=[MaxValueValidator(4), MinValueValidator(0)])
+    chtype_choices = ((0, '待处理'), (1, '处理中'), (2, '已完成'), (3, '已取消'), (4, '系统取消'))
+    chtype = models.IntegerField(choices=chtype_choices, default=0, validators=[MaxValueValidator(4), MinValueValidator(0)])
     requirment = models.TextField(null=True)
     feedback = models.TextField(null=True)
     award = models.IntegerField(default=0)
     bill = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     payment = models.DecimalField(default=0, max_digits=8, decimal_places=2)
-    release_time = models.DateField(auto_now_add=True)
+    release_time = models.DateTimeField(auto_now_add=True)
     hoster = models.ForeignKey('User', on_delete=models.CASCADE, null=True)
     class Meta:
         db_table = 'challenge'
@@ -92,5 +93,18 @@ class BackFile(models.Model):
         self.challenge.chtype = 2
         self.challenge.save()
         super(BackFile, self).save(*args, **kwargs)
+
+class Order(models.Model):
+    order_number = models.CharField(max_length=64)
+    status_choices = ((0, '未支付'), (1, '已支付'))
+    order_status = models.IntegerField(choices=status_choices, default=0)
+    bill = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    create_time = models.DateTimeField(auto_now_add=True, null=True)
+    challenge = models.OneToOneField(Challenge, on_delete=models.CASCADE, null=True)
+    class Meta:
+        db_table = 'order'
+    def __str__(self):
+        return str(self.order_status)
+
 
 

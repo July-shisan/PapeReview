@@ -4,6 +4,7 @@
     <script type="text/javascript">
         window.onload = function (ev) {
             var btn = document.querySelector('button');
+            // var btn = document.getElementById('test');
             var result = document.getElementById('result');
             var num = document.getElementById('numbers');
             btn.onclick = function (ev2) {
@@ -43,8 +44,8 @@
                 <div class="column is-three-fifths is-offset-one-fifth">
                     <div class="box">
                         <h3 class="title is-4">Commit </h3>
-                        <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
+<!--                        <form method="post" enctype="multipart/form-data">-->
+<!--                            {% csrf_token %}-->
                             <div class="field is-horizontal">
                                 <div class="field-label">
                                     <label class="label">word文档：</label>
@@ -52,9 +53,9 @@
                                 <div class="field-body">
                                     <input type="file" name="file" id="file">
                                 </div>
-                                <button class="button is-primary">提交</button>
+                                <button class="button is-primary" id="test">提交</button>
                             </div>
-                        </form>
+<!--                        </form>-->
                         <br>
                         <table class="table is-fullwidth">
                             <thead>
@@ -70,24 +71,44 @@
                             </tr>
                             </tbody>
                         </table>
-                        <h3 class="title is-4">支付</h3>
-                        <div align="center">
-                            <img src="{% static 'images/QR.jpg' %}">
-                        </div>
-{#                        <form method="post" enctype="multipart/form-data" action="{% url 'uploadfile' %}?taskId={{ task.chId }}">#}
-{#                            {% csrf_token %}#}
-{#                            <div class="field is-horizontal">#}
-{#                                <div class="field-label is-normal">#}
-{#                                    <label class="label">Solutions</label>#}
-{#                                </div>#}
-{#                                <div class="field-body">#}
-{#                                    <input type="file" name="file">#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="buttons">#}
-{#                                <input class="button is-primary" type="submit" value="Submit">#}
-{#                            </div>#}
-{#                        </form>#}
+                        <form method="post" enctype="multipart/form-data" action="{% url 'pay'%}" accept-charset="UTF-8">
+                            {% csrf_token %}
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">添加备注：</label>
+                                </div>
+                                <div class="field-body">
+                                    <textarea name="note" class="textarea" maxlength="300" placeholder="备注" id="note"></textarea>
+                                </div>
+                                <div class="field-label">
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                </div>
+                                <div class="field-body">
+                                    <div class="control">
+                                      <label class="radio">
+                                        <input type="radio" name="method" value="alipay" checked><img src="{% static 'images/alipay.jpg'%}">
+                                      </label>
+                                      <label class="radio">
+                                        <input type="radio" name="method" value="wxpay"><img src="{% static 'images/wxpay.jpg'%}">
+                                      </label>
+                                    </div>
+                                </div>
+                                <div class="field-label">
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                </div>
+                                <div class="field-body">
+                                    <input class="button is-primary" type="submit" value="确认支付">
+                                </div>
+                                <div class="field-label">
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

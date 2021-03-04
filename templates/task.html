@@ -39,14 +39,14 @@
                                 <p>￥{{ task.bill }}（元）</p>
                             </div>
                         </div>
-                        <div class="field info-field is-horizontal">
-                            <div class="field-label">
-                                <label class="label">实付款</label>
-                            </div>
-                            <div class="field-body">
-                                <p>￥{{ task.payment }}（元）</p>
-                            </div>
-                        </div>
+<!--                        <div class="field info-field is-horizontal">-->
+<!--                            <div class="field-label">-->
+<!--                                <label class="label">实付款</label>-->
+<!--                            </div>-->
+<!--                            <div class="field-body">-->
+<!--                                <p>￥{{ task.payment }}（元）</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <div class="field info-field is-horizontal">
                             <div class="field-label">
                                 <label class="label">文件</label>
@@ -55,6 +55,16 @@
                                 <p>{{ task.uploadfile.name }}</p>
                             </div>
                         </div>
+                        {%if task.chtype == 2 %}
+                        <div class="field info-field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">修改后文件</label>
+                            </div>
+                            <div class="field-body">
+                                <a href="/download/{{ task.chId }}">{{ task.backfile.name }}</a>
+                            </div>
+                        </div>
+                        {%endif%}
                         <form action="/task/{{ task.chId }}" method="post" accept-charset="UTF-8">
                             {% csrf_token %}
                         <div class="field info-field is-horizontal">

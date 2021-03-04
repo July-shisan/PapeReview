@@ -25,7 +25,7 @@ SECRET_KEY = '8upkoa597r3qt(ft(*gpiamffl0^crt^rim2309aqdzmnt^nl_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '212.64.64.87']
+ALLOWED_HOSTS = ['localhost', '212.64.64.87', 'www.ghtest.work', '47c6215fafa2.ngrok.io']
 
 
 # Application definition
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'haystack',
     'home',
+    'social_django',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'home.context_processors.front_user',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -88,6 +92,8 @@ DATABASES = {
         'PASSWORD': '1234',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+        #第三方登录
+        'OPTIONS': {'init_command': 'SET default_storage_engine=INNODB;'}
     }
 }
 
@@ -109,13 +115,35 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+#第三方登录
+AUTHENTICATION_BACKENDS = (
+    # 'users.views.CustomBackend',
+    'social_core.backends.weibo.WeiboOAuth2',
+    'social_core.backends.weixin.WeixinOAuth2',
+    'social_core.backends.qq.QQOAuth2',
 
+    'django.contrib.auth.backends.ModelBackend',
+)
+#微博密匙
+# SOCIAL_AUTH_WEIBO_KEY = '你申请的key'
+# SOCIAL_AUTH_WEIBO_SECRET = '密匙'
+#微信密匙
+SOCIAL_AUTH_WEIXIN_KEY = 'wxc33592e30a46751f'
+SOCIAL_AUTH_WEIXIN_SECRET = '66bf76b58d00cb51f4596bd33ba212f3'
+SOCIAL_AUTH_QQ_KEY = '101935299'
+SOCIAL_AUTH_QQ_SECRET = '186d283ee1aa0a8f362780146a80ddda'
+# SOCIAL_AUTH_QQ_KEY = '101938856'
+# SOCIAL_AUTH_QQ_SECRET = 'd44e9395b5b518310f94760817c017c7'
+#登录后跳转
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 
+#支付
+# wechat config
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True

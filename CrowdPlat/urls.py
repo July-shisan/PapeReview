@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from home import views
 from django.views.generic.base import RedirectView
 from home.admin import my_adminsite
@@ -24,6 +24,8 @@ urlpatterns = [
     path('admin/', my_adminsite.urls),
 
     path('', views.homeView.as_view(), name='home'),
+    path('', include('social_django.urls', namespace='social')),
+    path('wxtest/', views.wxtest, name='wx'),
     path('gh/', views.egg, name='egg'),
     path('register/', views.registerView.as_view(), name="register"),
     path('register_verif/', views.register_verif, name='register_verif'),
@@ -35,8 +37,13 @@ urlpatterns = [
     # path('uploadTestdata', taskviews.uploadTestdata, name='uploadTestdata'),
     # path('search', include('haystack.urls')),
     path('upload/', views.upload, name='upload'),
-    # path('uploadfile/', views.uploadfile, name='uploadfile'),
+    path('download/<taskId>', views.download, name='download'),
     path('wordnumbers/', views.wordnumbers, name='wordnumbers'),
     path('cancelIt/', views.cancelIt, name='cancelIt'),
     path('task/<taskId>', views.task, name='task'),
+    path('wxpay/', views.wxpay, name='wxpay'),
+    path('qqtest/', views.qqtest, name='qq'),
+    path('wxpayNotify/', views.wxpayNotify, name='wxpayNotify'),
+    path('pay/', views.PayView.as_view(), name='pay'),
+    path('alipay_handler/', views.PayHandlerView.as_view(), name='alipay_handler'),
 ]

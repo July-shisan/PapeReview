@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy
 # Register your models here.
-from home.models import User, UploadFile, Challenge, BackFile
+from home.models import User, UploadFile, Challenge, BackFile, Order
 from django.http import HttpResponse, FileResponse
 from django.urls import path
 from django.utils.html import format_html
@@ -11,16 +11,16 @@ from django.utils.encoding import escape_uri_path
 
 class ChallengeAdmin(admin.ModelAdmin):
     # fields = ('chtype', 'bill', 'payment', 'hoster', )
-    readonly_fields = ('requirment', 'bill', 'payment', 'hoster', 'release_time', 'uploadfile', 'backfile', 'download_link')
-    exclude = ('award',)
-    list_display = ('chId', 'chtype', 'bill', 'payment', 'hoster', 'uploadfile', 'release_time', 'backfile', 'download_link')
+    readonly_fields = ('requirment', 'bill', 'hoster', 'release_time', 'uploadfile', 'backfile', 'download_link')
+    exclude = ('award','payment')
+    list_display = ('chId', 'chtype', 'bill', 'order', 'hoster', 'uploadfile', 'release_time', 'backfile', 'download_link')
     # list_display_links = ('bill',)
-    search_fields = ['hoster__username', 'uploadfile__name', 'bill', ]
-    list_filter = ('chtype', 'hoster', 'release_time',)
+    search_fields = ['chtype', 'hoster__username', 'uploadfile__name', 'order__order_status']
+    list_filter = ('chtype', 'hoster', 'release_time', )
     list_per_page = 10
     list_editable = ('chtype',)
-    date_hierarchy = 'release_time'
-    ordering = ('-release_time', 'chId')
+    # date_hierarchy = 'release_time'
+    ordering = ('-chId', '-release_time', )
     '''自定义actions'''
     actions = ['change_status0', 'change_status1', 'change_status2', 'change_status4']
     def change_status0(self, request, queryset):
@@ -107,6 +107,17 @@ class BackFileAdmin(admin.ModelAdmin):
     # date_hierarchy = 'release_time'
     ordering = ('-challenge', '-upload_time', )
 
+class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ('order_number','create_time')
+    list_display = ('order_number', 'order_status', 'bill', 'challenge', 'create_time')
+    # list_display_links = ('bill',)
+    search_fields = ['challenge']
+    list_filter = ('order_status', 'create_time')
+    list_per_page = 10
+    # list_editable = ('chtype',)
+    # date_hierarchy = 'release_time'
+    ordering = ('-challenge', '-create_time')
+
 class MyAdminSite(admin.AdminSite):
     #网站标签页标题
     site_title = ugettext_lazy('后台管理')
@@ -118,3 +129,4 @@ my_adminsite.register(Challenge, ChallengeAdmin)
 my_adminsite.register(User, UserAdmin)
 my_adminsite.register(UploadFile, UploadFileAdmin)
 my_adminsite.register(BackFile, BackFileAdmin)
+my_adminsite.register(Order, OrderAdmin)
